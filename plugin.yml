@@ -1,0 +1,12 @@
+name: Clash
+description: Fairer PvP for players; PvP API for other plugins
+version: 1.0
+author: makskay
+website: http://dev.bukkit.org/server-mods/Clash
+
+main: me.makskay.clash.ClashPlugin
+softdepend: [GriefPrevention, WorldGuard]
+
+#commands:
+
+#permissions:

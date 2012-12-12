@@ -1,0 +1,8 @@
+ClaimsProtectEveryone: true
+PunishPvpLoggers: false
+DefaultProtectTime: 15
+DefaultPvpTime: 15
+ManagedWorlds:
+  - survival
+  - survival_nether
+  - survival_the_end
