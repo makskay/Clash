@@ -18,6 +18,8 @@ public class ClashPlugin extends JavaPlugin {
 	public static ClashPlugin instance;
 	
 	public void onEnable() {
+		instance = this;
+		
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("config.yml"));
 		
 		managedWorlds = config.getStringList("ManagedWorlds");
