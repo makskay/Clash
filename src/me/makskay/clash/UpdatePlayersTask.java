@@ -65,6 +65,8 @@ public class UpdatePlayersTask implements Runnable {
 					return;
 				}
 			}
+			
+			data.decrementProtectTime();
 		}
 	}
 

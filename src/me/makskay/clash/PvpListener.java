@@ -46,6 +46,7 @@ public class PvpListener implements Listener {
 		
 		Entity entDamager = event.getDamager(), entDamaged = event.getEntity();
 		if (!(entDamaged instanceof Player)) {
+			event.setCancelled(false);
 			return;
 		}
 		
@@ -58,10 +59,16 @@ public class PvpListener implements Listener {
 		else if (entDamager instanceof Projectile) {
 			Entity entShooter = ((Projectile) entDamager).getShooter();
 			if (!(entShooter instanceof Player)) {
+				event.setCancelled(false);
 				return;
 			}
 			
 			plrDamager = (Player) entShooter;
+		}
+		
+		else {
+			event.setCancelled(false);
+			return;
 		}
 		
 		PlayerData datDamager = playerManager.getData(plrDamager);

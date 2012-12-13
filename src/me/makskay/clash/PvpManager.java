@@ -51,7 +51,6 @@ public class PvpManager {
 					datAttacker.registerPlayer(playername); // add all members of the attacked's data to the attacker's
 				}
 			
-				datAttacked.resetTimeRemaining();
 				releasePvpData(datAttacked); // release the attacked's data
 				return true; // the data are merged
 			}
@@ -75,8 +74,10 @@ public class PvpManager {
 		
 		// if neither have data
 		PvpData pvpData = new PvpData(attacker, attacked); // create a new data object
-		attacker.sendMessage(ChatColor.DARK_RED + "You're in PvP combat. Don't log out until combat ends!");
-		attacked.sendMessage(ChatColor.DARK_RED + "You're in PvP combat. Don't log out until combat ends!");
+		if (ClashPlugin.punishPvpLoggers) {
+			attacker.sendMessage(ChatColor.DARK_RED + "You're in PvP combat. Don't log out until combat ends!");
+			attacked.sendMessage(ChatColor.DARK_RED + "You're in PvP combat. Don't log out until combat ends!");
+		}
 		data.add(pvpData);
 		return true;
 	}

@@ -34,6 +34,7 @@ public class ClashPlugin extends JavaPlugin {
 			managedWorlds.add("survival");
 			managedWorlds.add("survival_nether");
 			managedWorlds.add("survival_the_end");
+			managedWorlds.add("world");
 		}
 		
 		defaultProtectTime = config.getInt("DefaultProtectTime", 15);

@@ -24,6 +24,7 @@ public class PvpData {
 
 	public void registerPlayer(Player player) {
 		registerPlayer(player.getName());
+		resetTimeRemaining();
 	}
 	
 	
