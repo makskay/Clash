@@ -29,7 +29,7 @@ How about a more complicated example? Let's say you've developed another land pr
     
     Player player /* = whatever player you want to find out about */;
     PlayerData playerData = playerManager.getData(player);
-    playerData.setProtectTime(ClashPlugin.defaultProtectTime); // time is measured in seconds, assuming 20 ticks per second
+    playerData.setProtectTime(ClashPlugin.defaultProtectTime); // time in seconds, assuming 20 ticks per second
 
 What if you've developed a plugin that adds magic wands that can cast combat spells to the game, and want to restrict use of combat magic within Clash's safe zones? Again, it's pretty easy to mark two players as engaged in PvP:
 
