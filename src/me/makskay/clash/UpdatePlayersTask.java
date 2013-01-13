@@ -4,7 +4,7 @@ import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -19,11 +19,11 @@ public class UpdatePlayersTask implements Runnable {
 	private WorldGuardPlugin worldGuard;
 	private GriefPrevention griefPrevention;
 	
-	
 	public UpdatePlayersTask(ClashPlugin plugin) {
 		playerManager = plugin.getPlayerManager();
 		pvpManager    = plugin.getPvpManager();
 		
+		// WorldGuard support
 		Plugin plWg = Bukkit.getPluginManager().getPlugin("WorldGuard");
 		if (plWg == null || !(plWg instanceof WorldGuardPlugin)) {
 			worldGuard = null;
@@ -31,6 +31,7 @@ public class UpdatePlayersTask implements Runnable {
 			worldGuard = (WorldGuardPlugin) plWg;
 		}
 		
+		// Grief Prevention support
 		Plugin plGp = Bukkit.getPluginManager().getPlugin("GriefPrevention");
 		if (plGp == null || !(plGp instanceof GriefPrevention)) {
 			griefPrevention = null;
@@ -39,35 +40,59 @@ public class UpdatePlayersTask implements Runnable {
 		}
 	}
 
-	
+	@Override
 	public void run() {
 		for (Player player : playerManager.getManagedPlayers()) {
 			if (pvpManager.hasDataFor(player)) {
 				return; // player shouldn't be protected if in PVP
 			}
 			
-			PlayerData data = playerManager.getData(player);
-			Location loc    = player.getLocation();
+			executeGriefPrevention(player);
+			executeWorldGuardProtection(player);
 			
-			if (griefPrevention != null) {
-				Claim claim = GriefPrevention.instance.dataStore.getClaimAt(loc, true, null);
-				if (claim != null && (ClashPlugin.claimsProtectEveryone || claim.allowBuild(player) == null)) {
-					data.setProtectTime(ClashPlugin.defaultProtectTime);
-					return;
-				}
+			if (playerManager.getData(player).getProtectTime() == 1) {
+			   player.sendMessage(ChatColor.RED + "You are no longer protected from PVP.");
 			}
-			
-			if (worldGuard != null) {
-				RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
-				ApplicableRegionSet set = regionManager.getApplicableRegions(loc);
-				if (!set.allows(DefaultFlag.PVP)) {
-					data.setProtectTime(ClashPlugin.defaultProtectTime);
-					return;
-				}
-			}
-			
-			data.decrementProtectTime();
+			playerManager.getData(player).decrementProtectTime();
 		}
 	}
+	
+	/**
+	 * Executes protection that WorldGuard sets
+	 * 
+	 * @param player - The player to verify WorldGuard protection on
+	 */
+	private void executeWorldGuardProtection(Player player) {
+	   if (worldGuard != null) {
+         RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
+         ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation());
+         if (!set.allows(DefaultFlag.PVP)) {
+            //ClashPlugin.instance.getLogger().info("");
+            if (!playerManager.getData(player).isProtected()) {
+               player.sendMessage(ChatColor.GREEN + "You are now protected from PVP.");
+            }
+            playerManager.getData(player).setProtectTime(ClashPlugin.defaultProtectTime);
+            return;
+         }
+      }
+	}
+	
+	/**
+    * Executes protection that GriefPrevention sets
+    * 
+    * @param player - The player to verify GriefPrevention protection on
+    */
+   private void executeGriefPrevention(Player player) {
+      if (griefPrevention != null) {
+         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);
+         if (claim != null && (ClashPlugin.claimsProtectEveryone || claim.allowBuild(player) == null)) {
+            if (!playerManager.getData(player).isProtected()) {
+               player.sendMessage(ChatColor.GREEN + "You are now protected from PVP.");
+            }
+            playerManager.getData(player).setProtectTime(ClashPlugin.defaultProtectTime);
+            return;
+         }
+      }
+   }
 
 }

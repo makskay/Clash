@@ -20,4 +20,8 @@ public class PlayerData {
 	public void setProtectTime(int newProtectTime) {
 		protectTime = newProtectTime;
 	}
+	
+	public int getProtectTime() {
+	   return protectTime;
+	}
 }
