@@ -5,7 +5,7 @@ author: makskay
 website: http://dev.bukkit.org/server-mods/Clash
 
 main: me.makskay.clash.ClashPlugin
-softdepend: [GriefPrevention, WorldGuard]
+softdepend: [GriefPrevention, WorldGuard, Factions]
 
 #commands:
 

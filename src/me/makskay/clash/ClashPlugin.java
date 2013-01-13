@@ -1,12 +1,11 @@
 package me.makskay.clash;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ClashPlugin extends JavaPlugin {
@@ -20,21 +19,23 @@ public class ClashPlugin extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		
-		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("config.yml"));
+		//FileConfiguration config = YamlConfiguration.loadConfiguration(new File("config.yml"));
+		FileConfiguration config = getConfig();
 		
 		managedWorlds = config.getStringList("ManagedWorlds");
 		if (managedWorlds == null || managedWorlds.size() == 0) {
 			managedWorlds = new ArrayList<String>();
 			
-			// TODO Remyserver defaults -- for public release, just add every worldname on the server
-			/* for (World world : Bukkit.getWorlds()) {
+			// For public release, just add every worldname on the server
+			for (World world : Bukkit.getWorlds()) {
 				managedWorlds.add(world.getName());
-			} */
+			}
 			
-			managedWorlds.add("survival");
+			// For testing
+			/*managedWorlds.add("survival");
 			managedWorlds.add("survival_nether");
 			managedWorlds.add("survival_the_end");
-			managedWorlds.add("world");
+			managedWorlds.add("world");*/
 		}
 		
 		defaultProtectTime = config.getInt("DefaultProtectTime", 15);

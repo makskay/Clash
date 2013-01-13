@@ -1,5 +1,6 @@
 package me.makskay.clash;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,7 +37,7 @@ public class PlayerListener implements Listener {
 			playerManager.releasePlayer(player);
 			if (ClashPlugin.punishPvpLoggers && pvpManager.hasDataFor(player)) {
 				player.setHealth(0);
-				event.setQuitMessage(player.getName() + " logged out during PvP");
+				event.setQuitMessage(ChatColor.RED + player.getName() + " logged out during PvP");
 			}
 		}
 	}
